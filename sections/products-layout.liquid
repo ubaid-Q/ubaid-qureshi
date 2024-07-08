@@ -1,0 +1,161 @@
+{{ 'product-section.css' | asset_url | stylesheet_tag }}
+<script src="{{ 'product-section.js' | asset_url }}" defer="defer"></script>
+
+<h1 class="section-heading">Tisso Vison in the wild</h1>
+
+<section id="product-section-container">
+  <div class="product-grid">
+    {% assign product_1_id = section.settings.product_1 %}
+    {% assign product_2_id = section.settings.product_2 %}
+    {% assign product_3_id = section.settings.product_3 %}
+    {% assign product_4_id = section.settings.product_4 %}
+    {% assign product_5_id = section.settings.product_5 %}
+    {% assign product_6_id = section.settings.product_6 %}
+
+    {% assign selected_products = product_1_id
+      | append: ','
+      | append: product_2_id
+      | append: ','
+      | append: product_3_id
+      | append: ','
+      | append: product_4_id
+      | append: ','
+      | append: product_5_id
+      | append: ','
+      | append: product_6_id
+      | split: ','
+    %}
+
+    {% for product_id in selected_products %}
+      {% assign product = all_products[product_id] %}
+      {% if product %}
+        <div class="product-image" style="position: relative;">
+          <img src="{{ product.featured_image | img_url: 'medium' }}" alt="{{ product.title }}">
+          <div class="product-wrap {% cycle 'top-right', 'top-left', 'bottom-right', 'bottom-left' %}">
+            <button class="open-popup" data-product-id="{{ product.id }}">+</button>
+          </div>
+        </div>
+      {% endif %}
+    {% endfor %}
+  </div>
+
+  <div id="pop-up-container" class="pop-up-container" style="display:none;"></div>
+  <div id="product-popup" style="display:none;">
+    <div class="popup-content">
+      <span class="close-popup">&times;</span>
+      <div class="popup-image">
+        <img id="popup-product-image" src="" alt="">
+      </div>
+      <div class="popup-details">
+        <div class="content-wrap-pop-up">
+          <h2 id="popup-product-title" data-product-id=""></h2>
+          <p id="popup-product-price"></p>
+          <p id="popup-product-description"></p>
+        </div>
+      </div>
+    </div>
+
+    <div class="variant-wrap">
+      <p>Color:</p>
+      <div class="color-container">
+        <div class="color-box" id="white-box" onclick="selectColor('white')">
+          <div class="color-line" id="white-line"></div>
+          White
+        </div>
+        <div class="color-box" id="black-box" onclick="selectColor('black')">
+          <div class="color-line" id="black-line">.</div>
+          Black
+        </div>
+      </div>
+
+      <div class="dropdown-container">
+        <label class="size-variant-wrapper-text" for="size-variant-wrapper">Size: </label>
+        <div class="custom-dropdown">
+          <div class="dropdown-selected">Choose your size</div>
+          <span class="down-arrow"><i class="fa-solid fa-angle-down"></i></span>
+          <div class="dropdown-options" id="size-variant-wrapper">
+            <!-- ===== Size options will be dynamically ====== -->
+          </div>
+        </div>
+      </div>
+
+      <div class="atc-btn">
+        <div id="atc-notification" style="display: none;">Item added to your cart!</div>
+        <button id="add-to-cart">ADD TO CART <i class="fa-solid fa-arrow-right-long"></i></button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+  
+  const productsData = {
+        {% for product_id in selected_products %}
+          {% assign product = all_products[product_id] %}
+          {% if product %}
+            "{{ product.id }}": {
+              "image": "{{ product.featured_image | img_url: 'medium' }}",
+              "title": "{{ product.title }}",
+              "price": "{{ product.price | money }}",
+              "description": "{{ product.description }}",
+              "variants": [
+                {% for variant in product.variants %}
+                  {
+                    "id": "{{ variant.id }}",
+                    "title": "{{ variant.title }}",
+                    "price": "{{ variant.price | money }}",
+                    "option1": "{{ variant.option1 }}",
+                    "option2": "{{ variant.option2 }}",
+                    "option3": "{{ variant.option3 }}"
+                  }{% unless forloop.last %},{% endunless %}
+                {% endfor %}
+              ]
+            }{% unless forloop.last %},{% endunless %}
+          {% endif %}
+        {% endfor %}
+      };
+  
+</script>
+
+{% schema %}
+{
+  "name": "Product Layout",
+  "settings": [
+    {
+      "type": "product",
+      "id": "product_1",
+      "label": "Product 1"
+    },
+    {
+      "type": "product",
+      "id": "product_2",
+      "label": "Product 2"
+    },
+    {
+      "type": "product",
+      "id": "product_3",
+      "label": "Product 3"
+    },
+    {
+      "type": "product",
+      "id": "product_4",
+      "label": "Product 4"
+    },
+    {
+      "type": "product",
+      "id": "product_5",
+      "label": "Product 5"
+    },
+    {
+      "type": "product",
+      "id": "product_6",
+      "label": "Product 6"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Product Layout"
+    }
+  ]
+}
+{% endschema %}

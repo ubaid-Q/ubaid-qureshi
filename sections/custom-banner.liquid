@@ -1,0 +1,138 @@
+{{ 'banner-custom.css' | asset_url | stylesheet_tag }}
+
+
+<div class="main-container">
+  <img
+    src="https://cdn.shopify.com/s/files/1/0879/9495/8105/files/Frame.svg?v=1716061336"
+    alt=""
+    width="1350"
+    height="500"
+  >
+
+  <div class="navbar" id="navbar">
+    <span class="menu-icon" id="menu-icon">&#9776;</span>
+    <h2 id="bar-title">{{ section.settings.Title }}</h2>
+    <p id="center-text">{{ section.settings.Middle_text }}</p>
+    <button id="right-button">
+      {{ section.settings.button_heading }}
+      <i class="fa-solid fa-arrow-right-long"></i>
+    </button>
+  </div>
+  <div class="dropdown-content" id="dropdown-content">
+    <div class="dropdown-box">
+      <span class="close-icon" id="close-icon">&#10005;</span>
+      <h2>{{ section.settings.Title }}</h2>
+    </div>
+    <p>{{ section.settings.Middle_text }}</p>
+    <button>
+      {{ section.settings.button_heading -}}
+      <i class="fa-solid fa-arrow-right-long"></i>
+    </button>
+  </div>
+
+  <div class="main-wrapper">
+    <div class="content-container">
+      <div class="content-wrap">
+        <h1>{{ section.settings.main_heading }}</h1>
+        <p>
+          {{ section.settings.desc_text }}
+        </p>
+        <button>
+          {{ section.settings.main_button }}
+          <i class="fa-solid fa-arrow-right-long"></i>
+        </button>
+      </div>
+      <img
+        src="https://cdn.shopify.com/s/files/1/0879/9495/8105/files/Frame.svg?v=1716061336"
+        alt=""
+        width="1350"
+        height="800"
+      >
+    </div>
+    <div class="bottom-bar">{{ section.settings.bottom_bar }}</div>
+  </div>
+
+</div>
+  
+<script>
+  
+ document.addEventListener("DOMContentLoaded", function () {
+        const menuIcon = document.getElementById("menu-icon");
+        const mobileMenu = document.getElementById("dropdown-content");
+
+        menuIcon.addEventListener("click", function () {
+          mobileMenu.style.display =
+            mobileMenu.style.display === "block" ? "none" : "block";
+           mobileMenu.style.display = 'flex';
+        });
+
+        window.addEventListener("resize", function () {
+          if (window.innerWidth >= 751) {
+            mobileMenu.style.display = "none";
+          }
+        });
+
+     document.getElementById('close-icon').addEventListener('click', function() {
+      let dropdownContent = document.getElementById('dropdown-content');
+      dropdownContent.style.display = 'none';
+      });
+   
+      });
+  
+</script>
+
+
+{% schema %}
+{
+  "name": "Custom Banner",
+  "settings": [
+    {
+      "type": "text",
+      "id": "Title",
+      "default" : "Logo Text", 
+      "label": "Logo Heading Text"
+    },
+    {
+      "type": "text",
+      "id": "Middle_text",
+       "default" : "Lorem, ipsum dolor sit amet consectetur adipisicing elit.", 
+      "label": "Center Text"
+    },
+    {
+      "type": "text",
+      "id": "button_heading",
+      "default" : "Button Heading", 
+      "label": "Button heading"
+    },
+    {
+      "type": "text",
+      "id": "main_heading",
+      "default" : "Heading Text", 
+      "label": "Main Heading"
+    },
+    {
+      "type": "richtext",
+      "id": "desc_text",
+      "default" : "<p>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Lorem, ipsum dolor sit amet consectetur adipisicing elit.</p>", 
+      "label": "Description"
+    },
+    {
+      "type": "text",
+      "id": "main_button",
+      "default" : "Button Heading",
+      "label": "Main Button"
+    },
+    {
+      "type": "richtext",
+      "id": "bottom_bar",
+       "default" : "<p>Lorem, ipsum dolor sit amet consectetur adipisicing elit.</p>",
+      "label": "Bottom Bar Text"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Custom Banner"
+    }
+  ]
+}
+{% endschema %}
